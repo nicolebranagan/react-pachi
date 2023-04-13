@@ -5,7 +5,6 @@ export const useGamepad = () => {
   const subscribe = (reactCallback) => {
     const callback = (e) => {
       reactCallback();
-      console.error(e, "wow")
       setLastGamepad(navigator.getGamepads()[e.gamepad.index]);
     };
     window.addEventListener("gamepadconnected", callback);
@@ -20,7 +19,7 @@ export const useGamepad = () => {
 };
 
 // gamepad poll interval in milliseconds
-const GAMEPAD_POLL_INTERVAL = 1000;
+const GAMEPAD_POLL_INTERVAL = 100;
 
 // Button callback will be called with a boolean[] corresponding to the buttons
 export const usePollGamepad = (buttonCallback) => {
@@ -37,9 +36,9 @@ export const usePollGamepad = (buttonCallback) => {
 
     let lastTimeout;
     const timerCallback = () => {
-      if (gamepad.buttons.some(button => button.pressed)) {
-        buttonCallback(gamepad.buttons.map(buttons => buttons.pressed))
-      }
+      buttonCallbackRef.current(
+        gamepad.buttons.map((buttons) => buttons.pressed)
+      );
       lastTimeout = setTimeout(timerCallback, GAMEPAD_POLL_INTERVAL);
     };
     lastTimeout = setTimeout(timerCallback, GAMEPAD_POLL_INTERVAL);

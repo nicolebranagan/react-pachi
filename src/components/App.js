@@ -1,14 +1,9 @@
-import { usePollGamepad } from "../hooks/Gamepad";
+import { usePachinkoState } from "../hooks/PachinkoDataLines";
 
 function App() {
+  const pachinkoState = usePachinkoState();
 
-  usePollGamepad();
-  
-  return (
-    <div className="App">
-      Placeholder, for me?
-    </div>
-  );
+  return <div className="App">{JSON.stringify(pachinkoState)}</div>;
 }
 
 export default App;
