@@ -7,13 +7,26 @@ const JACKPOT_BUTTON = 1;
 const BALLS_WON_BUTTON = 2;
 const START_BUTTON = 3;
 
-const increment = (x) => x + 1;
-
 export const usePachinkoState = () => {
-  const [totalStarts, setTotalStarts] = React.useState(0);
-  const [jackpots, setJackpots] = React.useState(0);
-  const [startsSinceLastJackpot, setStartsSinceLastJackpot] = React.useState(0);
-  const [dekaballs, setDekaballs] = React.useState(0);
+  const [state, dispatch] = React.useReducer((state, action) => {
+    switch (action.index) {
+      case RESET_BUTTON: {
+        // TODO: Save old sessions
+        state = [];
+        break;
+      }
+      case JACKPOT_BUTTON:
+      case BALLS_WON_BUTTON:
+      case START_BUTTON: {
+        state = [...state, action];
+        break;
+      }
+    }
+    state = state.sort((a, b) => {
+      return a.time - b.time;
+    });
+    return state;
+  }, []);
 
   const lastButtonPressRef = React.useRef(null);
   const buttonListener = React.useCallback((buttonPresses) => {
@@ -26,29 +39,47 @@ export const usePachinkoState = () => {
     lastButtonPressRef.current = buttonPresses;
 
     // Always react when button is released, not pressed
-    const buttonChanges = buttonPresses.map(
-      (buttonStatus, index) => !buttonStatus && lastButtons[index]
-    );
-    if (buttonChanges[RESET_BUTTON]) {
-      setTotalStarts(0);
-      setJackpots(0);
-      setStartsSinceLastJackpot(0);
-      setDekaballs(0);
-    }
-    if (buttonChanges[JACKPOT_BUTTON]) {
-      setStartsSinceLastJackpot(0);
-      setJackpots(increment);
-    }
-    if (buttonChanges[BALLS_WON_BUTTON]) {
-      setDekaballs(increment);
-    }
-    if (buttonChanges[START_BUTTON]) {
-      setStartsSinceLastJackpot(increment);
-      setTotalStarts(increment);
-    }
+    buttonPresses.forEach((buttonStatus, index) => {
+      if (!buttonStatus && lastButtons[index]) {
+        dispatch({ index, time: performance.now() });
+      }
+    });
     return;
   }, []);
   usePollGamepad(buttonListener);
 
-  return { totalStarts, jackpots, startsSinceLastJackpot, dekaballs };
+  const dbgSendButton = React.useCallback((index) => {
+    dispatch({ index, time: performance.now() });
+  }, []);
+  React.useEffect(() => {
+    window.dbgSendButton = dbgSendButton;
+  }, [dbgSendButton]);
+
+  const results = React.useMemo(() => {
+    let totalStarts = 0,
+      jackpots = 0,
+      startsSinceLastJackpot = 0,
+      dekaballs = 0;
+    for (const action of state) {
+      switch (action.index) {
+        case JACKPOT_BUTTON:
+          jackpots++;
+          startsSinceLastJackpot = 0;
+          break;
+        case BALLS_WON_BUTTON:
+          dekaballs += 1;
+          break;
+        case START_BUTTON:
+          totalStarts++;
+          startsSinceLastJackpot++;
+          break;
+      }
+    }
+    return { totalStarts, jackpots, startsSinceLastJackpot, dekaballs };
+  }, [state]);
+
+  return {
+    dbgSendButton,
+    ...results,
+  };
 };
