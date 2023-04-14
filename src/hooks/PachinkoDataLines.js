@@ -66,12 +66,17 @@ export const usePachinkoState = () => {
       startsSinceLastJackpot = 0,
       dekaballs = 0;
     for (const action of state) {
-      if (action.type !== "down") {
+      const { index, type } = action;
+      if (type === "up" && index === JACKPOT_BUTTON) {
+        jackpots++;
+      }
+      if (type !== "down") {
         continue;
       }
-      switch (action.index) {
+      switch (index) {
         case JACKPOT_BUTTON:
-          jackpots++;
+          // Reset starts since last jackpot only once we've completed the jackpot
+          // so that you can see your number of starts
           startsSinceLastJackpot = 0;
           break;
         case BALLS_WON_BUTTON:
@@ -86,10 +91,19 @@ export const usePachinkoState = () => {
     return { totalStarts, jackpots, startsSinceLastJackpot, dekaballs };
   }, [state]);
 
+  const inJackpot = React.useMemo(() => {
+    const filteredState = state.filter((s) => s.index === JACKPOT_BUTTON);
+    if (filteredState.length === 0) {
+      return false;
+    }
+    return filteredState[filteredState.length - 1].type === "up";
+  }, [state]);
+
   return {
     dbgSendButton,
     dbgButtonStatus,
     state,
     ...results,
+    inJackpot,
   };
 };
