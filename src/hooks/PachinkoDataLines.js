@@ -38,18 +38,23 @@ export const usePachinkoState = () => {
     const lastButtons = lastButtonPressRef.current;
     lastButtonPressRef.current = buttonPresses;
 
-    // Always react when button is released, not pressed
     buttonPresses.forEach((buttonStatus, index) => {
-      if (!buttonStatus && lastButtons[index]) {
-        dispatch({ index, time: performance.now() });
+      if (buttonStatus && !lastButtons[index]) {
+        dispatch({ index, time: performance.now(), type: "down" });
+      } else if (!buttonStatus && lastButtons[index]) {
+        dispatch({ index, time: performance.now(), type: "up" });
       }
     });
     return;
   }, []);
-  usePollGamepad(buttonListener);
+  const dbgButtonStatus = usePollGamepad(buttonListener);
 
   const dbgSendButton = React.useCallback((index) => {
-    dispatch({ index, time: performance.now() });
+    dispatch({ index, time: performance.now(), type: "down" });
+    const timeout = setTimeout(() => {
+      dispatch({ index, time: performance.now(), type: "up" });
+    }, 100);
+    return () => clearTimeout(timeout);
   }, []);
   React.useEffect(() => {
     window.dbgSendButton = dbgSendButton;
@@ -61,6 +66,9 @@ export const usePachinkoState = () => {
       startsSinceLastJackpot = 0,
       dekaballs = 0;
     for (const action of state) {
+      if (action.type !== "down") {
+        continue;
+      }
       switch (action.index) {
         case JACKPOT_BUTTON:
           jackpots++;
@@ -80,6 +88,7 @@ export const usePachinkoState = () => {
 
   return {
     dbgSendButton,
+    dbgButtonStatus,
     state,
     ...results,
   };
