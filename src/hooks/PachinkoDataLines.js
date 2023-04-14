@@ -80,6 +80,7 @@ export const usePachinkoState = () => {
 
   return {
     dbgSendButton,
+    state,
     ...results,
   };
 };
