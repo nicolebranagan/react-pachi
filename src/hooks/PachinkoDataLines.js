@@ -57,7 +57,7 @@ export const usePachinkoState = () => {
     },
     [state]
   );
-  const dbgButtonStatus = usePollGamepad(buttonListener);
+  const { gamepadExists, dbgButtonStatus } = usePollGamepad(buttonListener);
 
   const results = React.useMemo(
     () => getPachinkoStatsFromSession(state),
@@ -106,6 +106,7 @@ export const usePachinkoState = () => {
     dbgSendButton,
     dbgButtonStatus,
     state,
+    gamepadExists,
     ...results,
     inJackpot,
     previousResults,

@@ -25,6 +25,7 @@ const GAMEPAD_POLL_INTERVAL = 100;
 export const usePollGamepad = (buttonCallback) => {
   const gamepad = useGamepad();
   const [dbgButtonStatus, setDbgButtonStatus] = React.useState([]);
+  const [gamepadExists, setGamepadExists] = React.useState(false);
 
   // Put in ref so we don't need to rerun the useEffect
   const buttonCallbackRef = React.useRef(buttonCallback);
@@ -34,6 +35,7 @@ export const usePollGamepad = (buttonCallback) => {
     if (!gamepad) {
       return;
     }
+    setGamepadExists(true);
 
     let lastTimeout;
     const timerCallback = () => {
@@ -49,5 +51,5 @@ export const usePollGamepad = (buttonCallback) => {
       clearTimeout(lastTimeout);
     };
   }, [gamepad]);
-  return dbgButtonStatus;
+  return { gamepadExists, dbgButtonStatus };
 };
