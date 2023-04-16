@@ -1,5 +1,6 @@
 import * as React from "react";
 import { usePachinkoState } from "../hooks/PachinkoDataLines";
+import { MainBody } from "./MainBody";
 
 function App() {
   const pachinkoState = usePachinkoState();
@@ -24,7 +25,7 @@ function App() {
   return (
     <div className={`wrapper ${jackpotClass}`}>
       <div className="border border-top" />
-      <div className={`main-body ${jackpotClass}`}></div>
+      <MainBody jackpotClass={jackpotClass} state={rest} />
       <div className="border border-bottom" />
     </div>
   );

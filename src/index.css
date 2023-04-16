@@ -40,4 +40,56 @@ body,
   background-position-x: right 3rem;
   background-image: url("./img/ranma.png");
   background-repeat: no-repeat;
+
+  display: flex;
+  flex-direction: column;
 }
+
+label {
+  font-family: "Press Start 2P", monospace;
+}
+
+.value {
+  font-family: "Bungee Shade", sans-serif;
+}
+
+.big-starts {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.big-starts label {
+  font-size: 24px;
+  height: 0px;
+  display: inline-block;
+}
+
+.big-starts .value {
+  font-size: 124px;
+  vertical-align: center;
+  top: -64px;
+  height: 164px;
+  position: relative;
+}
+
+.small-stats {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.small-stats label {
+  font-size: 16px;
+  height: 0px;
+  display: inline-block;
+}
+
+.small-stats .value {
+  font-size: 80px;
+  vertical-align: center;
+  top: -40px;
+  height: 96px;
+  position: relative;
+}
+
