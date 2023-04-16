@@ -3,6 +3,7 @@ body,
 #root {
   height: 100%;
   width: 100%;
+  margin: 0px;
 }
 
 .wrapper {
@@ -39,10 +40,11 @@ body,
 
 .main-body {
   height: 100%;
-  width: 100%;
+  width: calc(100% - 32px);
   background-position-y: bottom;
   background-position-x: right 3rem;
   background-repeat: no-repeat;
+  padding: 16px;
 
   display: flex;
   flex-direction: column;
@@ -66,42 +68,36 @@ label {
 }
 
 .big-starts {
-  padding: 16px;
   display: flex;
   flex-direction: column;
 }
 
 .big-starts label {
   font-size: 24px;
-  height: 0px;
   display: inline-block;
 }
 
 .big-starts .value {
   font-size: 124px;
   vertical-align: center;
-  top: -64px;
+  top: -16px;
   height: 164px;
   position: relative;
 }
 
 .small-stats {
-  padding: 8px;
   display: flex;
   flex-direction: column;
 }
 
 .small-stats label {
   font-size: 16px;
-  height: 0px;
   display: inline-block;
 }
 
 .small-stats .value {
   font-size: 80px;
   vertical-align: center;
-  top: -40px;
-  height: 96px;
   position: relative;
 }
 
