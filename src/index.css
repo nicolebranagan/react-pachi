@@ -1,0 +1,43 @@
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+.wrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.wrapper.no-jackpot {
+  background-color: #b6926d;
+}
+
+.border {
+  height: 128px;
+  width: 100%;
+  background-image: url("./img/border.png");
+  background-repeat: repeat-x;
+}
+
+.border.border-top {
+  background-position-y: bottom;
+}
+
+.border.border-bottom {
+  background-position-y: top;
+}
+
+.main-body {
+  height: 100%;
+  width: 100%;
+  background-position-y: bottom;
+  background-position-x: right 3rem;
+  background-image: url("./img/ranma.png");
+  background-repeat: no-repeat;
+}
