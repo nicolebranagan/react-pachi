@@ -18,6 +18,10 @@ body,
   background-color: #b6926d;
 }
 
+.wrapper.jackpot {
+  background-color: #246db6;
+}
+
 .border {
   height: 128px;
   width: 100%;
@@ -38,11 +42,19 @@ body,
   width: 100%;
   background-position-y: bottom;
   background-position-x: right 3rem;
-  background-image: url("./img/ranma.png");
   background-repeat: no-repeat;
 
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+}
+
+.main-body.no-jackpot {
+  background-image: url("./img/ranma.png");
+}
+
+.main-body.jackpot {
+  background-image: url("./img/lol.png");
 }
 
 label {
@@ -93,3 +105,6 @@ label {
   position: relative;
 }
 
+.crowd-image {
+  position: absolute;
+}

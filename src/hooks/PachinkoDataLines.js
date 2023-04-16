@@ -59,22 +59,6 @@ export const usePachinkoState = () => {
   );
   const dbgButtonStatus = usePollGamepad(buttonListener);
 
-  const dbgSendButton = React.useCallback(
-    (index) => {
-      const buttons = new Array(index + 1).fill(false);
-      buttons[index] = true;
-
-      buttonListener(buttons);
-      setTimeout(() => {
-        buttonListener(new Array(index + 1).fill(false));
-      }, 100);
-    },
-    [buttonListener]
-  );
-  React.useEffect(() => {
-    window.dbgSendButton = dbgSendButton;
-  }, [dbgSendButton]);
-
   const results = React.useMemo(
     () => getPachinkoStatsFromSession(state),
     [state]
@@ -85,7 +69,7 @@ export const usePachinkoState = () => {
     if (filteredState.length === 0) {
       return false;
     }
-    return filteredState[filteredState.length - 1].type === "up";
+    return filteredState[filteredState.length - 1].type === "down";
   }, [state]);
 
   const previousSessions = React.useSyncExternalStore(
@@ -98,6 +82,25 @@ export const usePachinkoState = () => {
     () => previousSessions.map(getPachinkoStatsFromSession),
     [previousSessions]
   );
+
+  const dbgSendButton = React.useCallback(
+    (index) => {
+      const jackpot = index === JACKPOT_BUTTON;
+      const buttons = new Array(index + 1).fill(false);
+      buttons[index] = jackpot ? !inJackpot : true;
+
+      buttonListener(buttons);
+      if (!jackpot) {
+        setTimeout(() => {
+          buttonListener(new Array(index + 1).fill(false));
+        }, 100);
+      }
+    },
+    [buttonListener, inJackpot]
+  );
+  React.useEffect(() => {
+    window.dbgSendButton = dbgSendButton;
+  }, [dbgSendButton]);
 
   return {
     dbgSendButton,

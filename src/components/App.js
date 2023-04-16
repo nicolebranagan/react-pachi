@@ -25,7 +25,7 @@ function App() {
   return (
     <div className={`wrapper ${jackpotClass}`}>
       <div className="border border-top" />
-      <MainBody jackpotClass={jackpotClass} state={rest} />
+      <MainBody jackpotClass={jackpotClass} inJackpot={inJackpot} state={rest} />
       <div className="border border-bottom" />
     </div>
   );
