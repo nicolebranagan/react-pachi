@@ -22,6 +22,9 @@ export const usePachinkoState = () => {
         state = [...state, action];
         break;
       }
+      default: {
+        break;
+      }
     }
     state = state.sort((a, b) => {
       return a.time - b.time;
@@ -82,6 +85,10 @@ export const usePachinkoState = () => {
     () => previousSessions.map(getPachinkoStatsFromSession),
     [previousSessions]
   );
+
+  React.useEffect(() => {
+    PlaySessionStore.update(state);
+  }, [state]);
 
   const dbgSendButton = React.useCallback(
     (index) => {
