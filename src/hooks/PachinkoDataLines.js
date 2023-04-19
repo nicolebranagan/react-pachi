@@ -90,11 +90,14 @@ export const usePachinkoState = () => {
     PlaySessionStore.update(state);
   }, [state]);
 
+  // Debug functionality, adds a function to window to send button presses
+  const [fakeGamepadExists, setFakeGamepadExists] = React.useState(false);
   const dbgSendButton = React.useCallback(
     (index) => {
       const jackpot = index === JACKPOT_BUTTON;
       const buttons = new Array(index + 1).fill(false);
       buttons[index] = jackpot ? !inJackpot : true;
+      setFakeGamepadExists(true);
 
       buttonListener(buttons);
       if (!jackpot) {
@@ -113,7 +116,7 @@ export const usePachinkoState = () => {
     dbgSendButton,
     dbgButtonStatus,
     state,
-    gamepadExists,
+    gamepadExists: gamepadExists || fakeGamepadExists,
     ...results,
     inJackpot,
     previousResults,
